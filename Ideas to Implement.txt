@@ -1,0 +1,49 @@
+------------------------------------------
+Fixes
+------------------------------------------
+
+Make the images centered.
+- Currently the top left of the image is considered the "center"
+
+
+------------------------------------------
+Sooner
+------------------------------------------
+
+Group Behavior: 
+- Entities could evolve to behave differently when they are near other entities of the same type. For example, they might group together for protection, or compete with each other for resources.
+    - Swarm Behavior: Entities could move towards other entities of the same type, causing them to form groups or swarms. This behavior could give them an advantage in outnumbering their prey or evading predators. You might implement a "group cohesion" factor that affects how strongly entities are attracted to each other.
+    - Collective Hunting: When entities of the same type are near each other, they could coordinate their movements to chase the same prey, increasing their chances of successful hunting.
+    - Group Defense: When a predator approaches, entities could group together to fend off the predator. This could involve surrounding the predator, or simply staying close together to make it harder for the predator to isolate and attack an individual.
+
+
+-----------------------------------------
+Later
+-----------------------------------------
+
+Genetic Traits: 
+- Each entity could have certain traits (like vision radius or force towards/away from others) that get passed down to their offspring, possibly with some slight random variation. This would allow traits that help entities survive and reproduce to become more common over time.
+
+Mutations: 
+- Occasionally, an entity could experience a mutation that significantly changes one of its traits. This could lead to the emergence of new strategies and dynamics in the population.
+
+Natural Selection: 
+- Entities with traits that make them more successful in the simulation (i.e., traits that allow them to live longer and reproduce more) will pass these traits on to their offspring. Over time, you should see these traits become more prevalent in the population.
+
+Predation Pressure: 
+- The force with which entities move away from predators (or towards prey) could also be a trait that evolves over time. Entities that are better at avoiding predators or catching prey would have an advantage.
+
+Mate Selection: 
+- Entities could have preferences for certain traits in mates, and only reproduce with entities that meet these preferences. Over time, this could lead to the evolution of these traits in the population.
+
+Energy Consumption: 
+- You could add an energy cost for certain actions (like moving or reproducing), and entities could evolve to be more or less energy-efficient.
+
+Adaptive Behavior: 
+- Entities could have a chance to adapt their behavior based on their surroundings or experiences. For example, if an entity encounters a lot of predators, it might evolve to be more cautious.
+
+Speed Evolution: 
+- Speed of the entities can also be an evolutionary trait. Faster entities may be better at catching prey or escaping from predators.
+
+Life Span Evolution: 
+- Life span could be an evolutionary trait. Entities with longer life spans have more chances to reproduce, but also may require more resources to stay alive.
