@@ -10,11 +10,6 @@ let winnerDisplay = null;
 let timeTillRestart = 5; // Time in seconds before restarting the sim 
 let winnerDisplayTime = 5; // Time in seconds to display the winner
 
-let lowEndofVision = 1;
-let highEngofVision = 150;
-
-let lowEndofSpeed = 1;
-let highEngofSpeed = 3;
 
 // Create an array to hold all the entities
 let entities = [];
@@ -25,9 +20,13 @@ function preload() {
   paperImg = loadImage('./pictures/paper.png');
   scissorsImg = loadImage('./pictures/scissors.png');
 
-  RockdeathSound = loadSound('./sounds/rocks-6129.mp3');
-  ScissorsdeathSound = loadSound('./sounds/sissors-40021.mp3');
-  PaperdeathSound = loadSound('./sounds/crumbling-paper-6163.mp3');
+  RockdeathSound = loadSound('./sounds/ivan_yell.mp3');
+  ScissorsdeathSound = loadSound('./sounds/ivan_yell.mp3');
+  PaperdeathSound = loadSound('./sounds/ivan_yell.mp3');
+
+  RockeatSound = loadSound('./sounds/jake_tasty.mp3');
+  ScissorseatSound = loadSound('./sounds/jake_tasty.mp3');
+  PapereatSound = loadSound('./sounds/jake_tasty.mp3');
 }
 
 function countTribes() {
@@ -80,22 +79,70 @@ function setup() {
   reset();
 
   // Get the button element and set up the event handler
-  let btn = select('#toggle-vision');
-  btn.mousePressed(() => {
+  let vision_btn = select('#toggle-vision');
+  vision_btn.mousePressed(() => {
     showVision = !showVision; // Toggle the vision visibility state
   });
 }
 
+let tribeData = {
+  rock: {speed: [], vision: []},
+  paper: {speed: [], vision: []},
+  scissors: {speed: [], vision: []}
+};
+
+function collectData() {
+  for (let tribe in tribeData) {
+      let entitiesOfTribe = entities.filter(entity => entity.tribe === tribe);
+      if (entitiesOfTribe.length > 0) {
+          let averageSpeed = entitiesOfTribe.reduce((sum, entity) => sum + entity.speed, 0) / entitiesOfTribe.length;
+          let averageVision = entitiesOfTribe.reduce((sum, entity) => sum + entity.visionRadius, 0) / entitiesOfTribe.length;
+
+          tribeData[tribe].speed.push(averageSpeed);
+          tribeData[tribe].vision.push(averageVision);
+      }
+  }
+}
+
+function getAverageData() {
+  let averageData = {
+      rock: {speed: 0, vision: 0},
+      paper: {speed: 0, vision: 0},
+      scissors: {speed: 0, vision: 0}
+  };
+
+  for (let tribe in tribeData) {
+      let speedSum = tribeData[tribe].speed.reduce((sum, speed) => sum + speed, 0);
+      let visionSum = tribeData[tribe].vision.reduce((sum, vision) => sum + vision, 0);
+
+      averageData[tribe].speed = speedSum / tribeData[tribe].speed.length;
+      averageData[tribe].vision = visionSum / tribeData[tribe].vision.length;
+  }
+
+  console.table(averageData);
+}
+
 function draw() {
   background(220);
+
+
+  // Draw a line in the middle of the screen
+  // Used for me to visualize pixel distances
+  // stroke(255, 0, 0); // Set the line color to white
+  // let lineLength = 20;
+  // let lineX = width / 2 - lineLength / 2;
+  // let lineY = height / 2;
+  // line(lineX, lineY, lineX + lineLength, lineY);
   
   // Move and draw all entities
   for (let i = entities.length - 1; i >= 0; i--) {
     let entity = entities[i];
-    entity.move();
-    entity.draw();
-    if (entity.lifespan <= 0) {
-      entities.splice(i, 1);  // Remove the entity
+    if (entity) {
+      entity.move();
+      entity.draw();
+      if (entity.lifespan <= 0) {
+        entities.splice(i, 1);  // Remove the entity
+      }
     }
   }
 
@@ -109,15 +156,19 @@ function draw() {
   text(`Scissors: ${counts.scissors}`, width - 10, 50);
   text(`Total: ${counts.total} / ${n_entities}`, width - 10, 70);
 
+  setTimeout(() => {
+    collectData();
+  }, 5 * 1000); // Milliseconds (5 seconds = 5 * 1000 milliseconds)
+
   // Display the winner if there is one
   if (round_winner && !isResetScheduled) {
     textAlign(CENTER, CENTER);
     textSize(50);
     text(`${round_winner} has won!`, width / 2, height / 2);
 
-    console.log(round_winner + " has won!")
-
     winnerDisplay = round_winner;
+    console.log(round_winner + " has won!");
+    getAverageData();
     
     setTimeout(() => {
       winnerDisplay = null;
